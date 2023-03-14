@@ -7,7 +7,7 @@ const config = {
   },
 };
 export const apiOrder = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8003/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://art-crafts-order-service.herokuapp.com/api" }),
   reducerPath: "orderApi",
   tagTypes: ["Order"],
   endpoints: (build) => ({
@@ -78,7 +78,7 @@ export const {
 
 
 export const apiOrderDetails = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8003/api" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://art-crafts-order-service.herokuapp.com/api" }),
   reducerPath: "orderDetailApi",
   tagTypes: ["OrderDetail"],
   endpoints: (build) => ({
