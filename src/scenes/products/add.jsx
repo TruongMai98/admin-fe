@@ -11,6 +11,7 @@ import {
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Header from "components/Header";
+import UploadWidget from "components/UploadWidget ";
 import { useState } from "react";
 import {
   useCreateFileMutation,
@@ -18,13 +19,6 @@ import {
 } from "state/apiProduct";
 
 function CreateProductForm() {
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [category_name, setCategory_name] = useState("");
   const [file, setFile] = useState(null);
   const [updateFile] = useCreateFileMutation();
   const [product, setProduct] = useState({});
@@ -32,18 +26,20 @@ function CreateProductForm() {
 
   const [createProduct] = useCreateProductMutation();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const product = {
-      id,
-      name,
-      price,
-      description,
-      image,
-      quantity,
-      category_name,
-    };
+  const [url, updateUrl] = useState();
+  const [imageError, updateImageError] = useState();
+
+  const handleOnUpload = (error, result, widget) => {
+    if (error) {
+      updateImageError(error);
+      widget.close({
+        quiet: true,
+      });
+      return;
+    }
+    updateUrl(result?.info?.secure_url);
   };
+
   const handleChange = (e) => {
     console.log(e.target.name);
     if (e.target.name === "image") {
@@ -93,7 +89,6 @@ function CreateProductForm() {
                 name="name"
                 onChange={handleChange}
                 variant="outlined"
-               
                 error={error.name ? true : false}
                 helperText={error.name}
               />
@@ -146,10 +141,9 @@ function CreateProductForm() {
                 helperText={error.category_name}
               />
             </Box>
-            
-            
+
             <Box sx={{ mb: 3 }}>
-              <TextField
+              {/* <TextField
                 fullWidth
                 type="file"
                 label="Image :"
@@ -157,7 +151,18 @@ function CreateProductForm() {
                 onChange={handleChange}
                 variant="outlined"
                 size="small"
-              />
+              /> */}
+              <UploadWidget onUpload={handleOnUpload}>
+                {({ open }) => {
+                  function handleOnClick(e) {
+                    e.preventDefault();
+                    open();
+                  }
+                  return (
+                    <button onClick={handleOnClick}>Upload an Image</button>
+                  );
+                }}
+              </UploadWidget>
             </Box>
             <Box mt={2} display="flex" justifyContent="flex-end">
               <Button variant="outlined" sx={{ mr: 2 }}>
